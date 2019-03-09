@@ -29,14 +29,14 @@ public class Lib{
     public static int getLineNum(){return lineNum;}
     public static List<Map.Entry<String, Integer>> getSortedList(){return wordList;}
 
-	/**
-	 * 初始化构造
-	**/
-	public Lib(byte[] bytes){
-		this.bytes = bytes;
+    /**
+     * 初始化构造
+    **/
+    public Lib(byte[] bytes){
+        this.bytes = bytes;
         this.bytesLength = bytes.length;
         this.wordMap = new TreeMap<String, Integer>();
-	}
+    }
     /**
      * 功能：预处理
      *      将大写字母转为小写字母
