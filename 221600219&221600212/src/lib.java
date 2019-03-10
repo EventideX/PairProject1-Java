@@ -59,7 +59,7 @@ public class Lib{
             if (bytes[i] >= 65 && bytes[i] <= 90){
                 bytes[i] += 32;
             }
-            if (bytes[i] == 10){
+            if (bytes[i] == 13){
                 // 计算行数
                 if (checkLine(bytes, i)){
                     lineNum ++;
@@ -69,7 +69,7 @@ public class Lib{
             }
         }
         // 注意最后一行不以回车结尾的情况，同样算作一行
-        if (bytes[bytesLength-1] != 10){
+        if (bytes[bytesLength-1] != 13){
             lineNum ++;
         }
     }
@@ -82,10 +82,8 @@ public class Lib{
         for (int i = 0; i < bytesLength; i ++){
             if (isLetter(bytes[i])){
                 checkWordResult = checkWord(bytes, i, 4);
-                String aWordString = subBytesToString(bytes, i, checkWordResult);
-                System.out.println(aWordString);
                 if (checkWordResult > 0){
-                    // aWordString = subBytesToString(bytes, i, checkWordResult);
+                    String aWordString = subBytesToString(bytes, i, checkWordResult);
                     // System.out.println(aWordString);
                     // 存入集合中
                     if (wordMap.containsKey(aWordString)){
