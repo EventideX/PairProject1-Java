@@ -19,7 +19,7 @@ public class Main{
     public static byte[] inputFileBytes = null;
 
     // 排序打印出前几的个数
-    public static final int SORT_PRINT_NUM = 10;
+    public static final int SORT_PRINT_NUM = 100;
 
 
     /**
@@ -28,7 +28,13 @@ public class Main{
      */
     public static void main(String[] args) {
         // 初始化
-        String inputFileName = args[0];
+        String inputFileName = null;
+        if (args.length > 0 && args != null){
+            inputFileName = args[0];
+        } else{
+            System.out.println("未输入参数");
+            return;
+        }
 
         // 读取文件
         inputFileBytes = readFileToBytes(inputFileName);

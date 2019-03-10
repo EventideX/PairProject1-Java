@@ -29,6 +29,12 @@ public class Lib{
     public static int getLineNum(){return lineNum;}
     public static List<Map.Entry<String, Integer>> getSortedList(){return wordList;}
 
+
+
+    public static void main(String[] args) {
+        System.out.println(isSeparator((byte)'&'));
+    }
+
     /**
      * 初始化构造
     **/
@@ -37,6 +43,7 @@ public class Lib{
         this.bytesLength = bytes.length;
         this.wordMap = new TreeMap<String, Integer>();
     }
+
     /**
      * 功能：预处理
      *      将大写字母转为小写字母
@@ -74,9 +81,11 @@ public class Lib{
         int checkWordResult = -1;
         for (int i = 0; i < bytesLength; i ++){
             if (isLetter(bytes[i])){
-                checkWordResult = checkWord(bytes, bytesLength, i, 4);
+                checkWordResult = checkWord(bytes, i, 4);
+                String aWordString = subBytesToString(bytes, i, checkWordResult);
+                System.out.println(aWordString);
                 if (checkWordResult > 0){
-                    String aWordString = subBytesToString(bytes, i, checkWordResult);
+                    // aWordString = subBytesToString(bytes, i, checkWordResult);
                     // System.out.println(aWordString);
                     // 存入集合中
                     if (wordMap.containsKey(aWordString)){
@@ -118,9 +127,12 @@ public class Lib{
      * 返回：String aWordString 截取转成的字符串
      */
     static String subBytesToString(byte[] bytes, int start, int end){
-        byte[] aWordByte = new byte[end-start];
-        System.arraycopy(bytes, start, aWordByte, 0, end-start);
-        return new String(aWordByte);
+        if (end >= start){
+            byte[] aWordByte = new byte[end-start];
+            System.arraycopy(bytes, start, aWordByte, 0, end-start);
+            return new String(aWordByte);
+        }
+        return null;
     }
 
     /**
@@ -155,7 +167,19 @@ public class Lib{
      *      boolean false 不是字母
     **/
     static boolean isLetter(byte b){
-        return (b >= 97 && b <= 122);
+        return (b >= 97 && b <= 122) || (b >= 65 && b <= 90);
+    }
+
+    /**
+     * 功能：判断Byte字节是否是数字
+     *
+     * 参数：byte b 字节
+     *
+     * 返回：boolean true 是数字
+     *      boolean false 不是数字
+     */
+    static boolean isNum(byte b){
+        return (b >= 48 && b <= 57);
     }
 
     /**
@@ -172,21 +196,33 @@ public class Lib{
     }
 
     /**
+     * 功能：判断Byte字节是否是分隔符
+     *
+     * 参数：byte b 字节
+     *
+     * 返回：boolean true 是分隔符
+     *      boolean false 不是分隔符
+     */
+    static boolean isSeparator(byte b){
+        return !(isLetter(b)|| isNum(b));
+    }
+
+    /**
      * 功能：判断从某个下标开始的一段长度是否是单词
      *
      * 参数：byte[] bytes 字节数组
-     *      int bytesLength 字节数组长度
      *      int start 开始下标
      *      int minWordLength 满足最小需求的开头字母数
      *
      * 返回：int < 0 不是单词，负的词末尾分隔符的下标
      *      int > 0 是单词，单词末尾分隔符的下标
     **/
-    static int checkWord(byte[] bytes, int bytesLength, int start, int minWordLength){
+    static int checkWord(byte[] bytes, int start, int minWordLength){
+        int bytesLength = bytes.length;
         int i = start;
         int checkWordResult = 0;
 
-        if (start > 0 && !isLetter(bytes[start-1]) && !isBlankChar(bytes[start-1])){
+        if (start > 0 && ! isSeparator(bytes[start-1])){
             checkWordResult = -1;
         } else{
             for (; i < start + minWordLength && i < bytesLength; i++){
@@ -203,8 +239,8 @@ public class Lib{
         }
         for (; i < bytesLength; i++){
             // 遍历到词结束，返回词末尾的下标
-            if (isBlankChar(bytes[i])){
-                // 字符不是空格、换行、制表符
+            if (isSeparator(bytes[i])){
+                // 字符不是分隔符
                 break;
             }
         }
