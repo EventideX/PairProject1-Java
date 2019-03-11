@@ -57,7 +57,7 @@ public class Main{
         wordList = core.getSortedList();
 
         // 打印结果
-        printResult();
+        // printResult();
 
         // 保存结果
         writeResult();
@@ -104,7 +104,7 @@ public class Main{
         System.out.println("lines: " + wordNum);
         int i = 0;
         for (Map.Entry<String, Integer> entry : wordList) {
-            System.out.println(entry.getKey() + ": " + entry.getValue());
+            System.out.println("<" + entry.getKey() + ">: " + entry.getValue());
             if (++ i >= SORT_PRINT_NUM){
                 break;
             }
