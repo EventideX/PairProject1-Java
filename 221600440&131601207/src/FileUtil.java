@@ -16,32 +16,32 @@ class FileUtil {
 	@SuppressWarnings("resource")
 	public String FiletoText() throws IOException {
 		InputStream is = new FileInputStream(filePath);
-        int char_type; // ÓÃÀ´±£´æÃ¿ĞĞ¶ÁÈ¡µÄÄÚÈİ
+        int char_type; // ç”¨æ¥ä¿å­˜æ¯è¡Œè¯»å–çš„å†…å®¹
         BufferedReader reader = new BufferedReader(new InputStreamReader(is));
-        while ((char_type = reader.read()) != -1) { // Èç¹û line Îª¿ÕËµÃ÷¶ÁÍêÁË
-            sb.append((char)char_type); // ½«¶Áµ½µÄÄÚÈİÌí¼Óµ½ buffer ÖĞ
+        while ((char_type = reader.read()) != -1) { // å¦‚æœ line ä¸ºç©ºè¯´æ˜è¯»å®Œäº†
+            sb.append((char)char_type); // å°†è¯»åˆ°çš„å†…å®¹æ·»åŠ åˆ° buffer ä¸­
         }
         return sb.toString();
 	}
-	/*
+	
 	@SuppressWarnings("resource")
 	public void resultToFile(String result) {
 		try {
             File file = new File("result.txt");
             PrintStream ps = new PrintStream(new FileOutputStream(file));
-            ps.println(result);// ÍùÎÄ¼şÀïĞ´Èë×Ö·û´®
+            ps.println(result);// å¾€æ–‡ä»¶é‡Œå†™å…¥å­—ç¬¦ä¸²
         } catch (FileNotFoundException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
         }
 	}
-	*/
+	
 	@SuppressWarnings("resource")
 	public void lineCount() throws IOException {
 		BufferedReader br = new BufferedReader(new FileReader(filePath));
 		String readline;
 		while((readline=br.readLine())!=null) {
-			readline=readline.trim();//È¥³ı¿Õ°×ĞĞ
+			readline=readline.trim();//å»é™¤ç©ºç™½è¡Œ
 			if(readline.length()!=0) lineCnt++;
 		}
 	}
