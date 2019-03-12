@@ -1,0 +1,4 @@
+characters: 76
+words: 1
+lines: 3
+<abcdefghijklmnopqrstuvwxyz>: 1
