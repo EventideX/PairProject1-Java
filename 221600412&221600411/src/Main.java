@@ -1,9 +1,10 @@
-package soft.src;
+package src;
 
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
-import static soft.src.Lib.*;
+
+import static src.Lib.*;
 
 /**
  * @program: java8
@@ -13,9 +14,7 @@ import static soft.src.Lib.*;
  **/
 public class Main {
     public static void main(String args[]) throws IOException {
-        args = new String[5];
-        args[1] = "G:\\DubboProject\\SuanFa\\src\\main\\java\\soft\\input.txt";
-        String content = readFile(args[1]);
+        String content = readFile(args[0]);
         countChar(content);  // 计算 字符数
         countWord(content);  // 计算单词总数
         countLine(content); // 计算行数

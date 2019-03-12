@@ -1,4 +1,4 @@
-package soft.src;
+package src;
 
 import java.util.*;
 
