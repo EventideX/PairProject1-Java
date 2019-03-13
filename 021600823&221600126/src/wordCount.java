@@ -14,10 +14,14 @@ public class wordCount
 	int characters = 0;
 	int lines = 0;
 	int words = 0;
+	count counter;
 	
-	public wordCount(String fileName, int top) throws IOException
+	public wordCount()
 	{
-		count counter = new count();
+		counter = new count();
+	}
+	public void countWords(String fileName, int top) throws IOException
+	{
 		wordHeap wh = new wordHeap();
 		HashMap<String, Integer> wordMap = new HashMap<String, Integer>();
 		BufferedReader br = new BufferedReader(new FileReader(fileName));
@@ -60,7 +64,7 @@ public class wordCount
 		bw.close();
 	}
 	
-	public void wordClassify(HashMap<String, Integer> wordMap, wordHeap wh)
+	public void wordClassify(HashMap<String, Integer> wordMap, wordHeap wh) // 单词归类，将哈希表中的单词归入词堆（最大堆）
 	{
 		String word;
 		java.util.Iterator<Entry<String, Integer>> iter = wordMap.entrySet().iterator(); // 键值对遍历哈希表
