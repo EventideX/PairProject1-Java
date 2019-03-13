@@ -12,14 +12,25 @@ public class Main {
 		Counter c=new Counter(text);
 		c.charCount();
 		c.wordCount();
-		
-		System.out.println("characters:"+c.getCharCnt());
-		System.out.println("words:"+c.getWordCnt());
+		String result= new String();
+		result="characters:"+c.getCharCnt()+"\r\n";
+		result+="words:"+c.getWordCnt()+"\r\n";
 		fileutil.lineCount();
+		result+="lines:"+fileutil.getLineCnt()+"\r\n";
 		Set<Entry<String,Integer>> entry = c.getMap().entrySet();
-		System.out.println("lines:"+fileutil.getLineCnt());
-		for(Entry<String,Integer> ent : entry){
-            System.out.println("<"+ent.getKey()+">:"+ent.getValue());
+		if(entry.size()<=10) {
+			for(Entry<String,Integer> ent : entry){
+				result+="<"+ent.getKey()+">:"+ent.getValue()+"\r\n";
+	        }
+		}
+		else {
+			int i=0;
+			for(Entry<String,Integer> ent : entry) {
+				result+="<"+ent.getKey()+">:"+ent.getValue()+"\r\n";
+				i++;
+				if(i>=10) break;
+			}
+		}
+		fileutil.resultToFile(result);
         }
-	}
 }
