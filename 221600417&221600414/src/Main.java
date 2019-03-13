@@ -30,7 +30,6 @@ public class Main {
                 }
                 letterBuilder.append((char) charInt);
             } else if (Lib.isNumber(charInt)) {
-                // 4 letter check
                 if (letterCheck == 0) {
                     letterBuilder.append((char) charInt);
                 } else {
@@ -39,7 +38,7 @@ public class Main {
                     letterCheckAble = false;
                 }
             } else {
-                if (letterCheck == 0) {
+                if (letterCheck == 0 && letterCheckAble) {
                     wordNum++;
                     letter = letterBuilder.toString()
                             .toLowerCase();
@@ -49,7 +48,6 @@ public class Main {
                 letterCheck = -4;
                 letterCheckAble = Lib.isDivision(charInt);
             }
-            // line handle
             if (charInt == 10) {
                 if (haveChar) {
                     lineNum++;
@@ -59,9 +57,10 @@ public class Main {
                 haveChar = true;
             }
         }
-        if (letterCheck == 0  && letterCheckAble) {
+        if (letterCheck == 0 && letterCheckAble) {
             letter = letterBuilder.toString()
                     .toLowerCase();
+            wordNum++;
             letterMap.merge(letter, 1, (a, b) -> a + b);
         }
         if (haveChar)   lineNum++;
