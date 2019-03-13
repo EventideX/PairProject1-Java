@@ -4,22 +4,22 @@ import java.util.*;
 public class Main{
 
     // 行数
-    public static int lineNum = 0;
+    static int lineNum = 0;
 
     // 字符数
-    public static int charNum = 0;
+    static int charNum = 0;
 
     // 单词数：至少四个英文字母开头，不区分大小写
-    public static int wordNum = 0;
+    static int wordNum = 0;
 
     // 排序好的单词集合
-    public static List<Map.Entry<String, Integer>> wordList = null;
+    static List<Map.Entry<String, Integer>> wordList = null;
 
     // 输入文件字节数组
-    public static byte[] inputFileBytes = null;
+    static byte[] inputFileBytes = null;
 
     // 排序打印出前几的个数
-    public static final int SORT_PRINT_NUM = 100;
+    static final int SORT_PRINT_NUM = 10;
 
 
     /**
@@ -33,7 +33,7 @@ public class Main{
             inputFileName = args[0];
         } else{
             System.out.println("未输入参数");
-            return;
+            System.exit(1);
         }
 
         // 读取文件
@@ -41,13 +41,9 @@ public class Main{
 
         Lib core = new Lib(inputFileBytes);
 
-        // 预处理，计算字符数、行数
+        // 预处理，计算字符数、行数、单词数，排序频率
         core.preproccess();
-
-        // 计算单词数、并将单词装入集合、统计个数
         core.collectWord();
-
-        // 按照单词频率排序
         core.sortWordMap();
 
         // 获取结果
@@ -56,22 +52,20 @@ public class Main{
         lineNum = core.getLineNum();
         wordList = core.getSortedList();
 
-        // 打印结果
+        // 结果
         // printResult();
-
-        // 保存结果
         writeResult();
     }
 
 
     /**
-     * 功能：读取文件到字节数组中
+     * 读取文件到字节数组中
      *
-     * 参数：String fileName 文件名
+     * @param fileName 文件名
      *
-     * 返回：byte[] bytes 字节数组
+     * @return bytes 字节数组
      */
-    public static byte[] readFileToBytes(String fileName){
+    static byte[] readFileToBytes(String fileName){
         byte[] fileBytes = null;
 
         try {
@@ -79,6 +73,7 @@ public class Main{
             if (file.isFile() && file.exists()){
                 FileInputStream reader = new FileInputStream(file);
                 Long fileLength = file.length();
+				// System.out.println("fileLength: " + fileLength);
                 fileBytes = new byte[fileLength.intValue()];
                 reader.read(fileBytes);
                 reader.close();
@@ -96,12 +91,12 @@ public class Main{
     }
 
     /**
-     * 功能：打印结果到控制台
+     * 打印结果到控制台
      */
-    public static void printResult(){
+    static void printResult(){
         System.out.println("characters: " + charNum);
-        System.out.println("words: " + lineNum);
-        System.out.println("lines: " + wordNum);
+        System.out.println("words: " + wordNum);
+        System.out.println("lines: " + lineNum);
         int i = 0;
         for (Map.Entry<String, Integer> entry : wordList) {
             System.out.println("<" + entry.getKey() + ">: " + entry.getValue());
@@ -112,16 +107,16 @@ public class Main{
     }
 
     /**
-     * 功能：输出结果到文件中
+     * 输出结果到文件中
      */
-    public static void writeResult(){
+    static void writeResult(){
         String resultString = String.format(
             "characters: %d\nwords: %d\nlines: %d\n",
             charNum, wordNum, lineNum
         );
         int i = 0;
         for (Map.Entry<String, Integer> entry : wordList) {
-            resultString += String.format("%s: %d\n", entry.getKey(), entry.getValue());
+            resultString += String.format("<%s>: %d\n", entry.getKey(), entry.getValue());
             if (++ i >= SORT_PRINT_NUM){
                 break;
             }

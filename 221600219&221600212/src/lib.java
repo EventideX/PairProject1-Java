@@ -23,6 +23,9 @@ public class Lib{
 
     // 长度：字节数组长度
     private static int bytesLength = 0;
+	
+	// 单词所需最小开头字母数
+	private static final int MIN_WORD_LETTER_NUM = 4;
 
     public static int getCharNum(){return charNum;}
     public static int getWordNum(){return wordNum;}
@@ -45,12 +48,13 @@ public class Lib{
     }
 
     /**
-     * 功能：预处理
+     * 预处理
      *      将大写字母转为小写字母
      *      计算字节数组中的字符数、包括空字符、//r//n算作一个字符
+	 *      兼容\n换行
      *      计算字节数组包含的行数
      *
-     * 参数：byte[] bytes 字节数组
+     * @param bytes 字节数组
      */
     public static void preproccess(){
         // 计算字符数、行数
@@ -59,29 +63,33 @@ public class Lib{
             if (bytes[i] >= 65 && bytes[i] <= 90){
                 bytes[i] += 32;
             }
-            if (bytes[i] == 13){
+            if (bytes[i] == 10){
                 // 计算行数
                 if (checkLine(bytes, i)){
                     lineNum ++;
                 }
+				// 当换行为\n时保证不遗漏字符
+				if (i-1 >= 0 && bytes[i-1] != 13){
+					charNum ++;
+				}
             }else{
                 charNum ++;
             }
         }
         // 注意最后一行不以回车结尾的情况，同样算作一行
-        if (bytes[bytesLength-1] != 13){
+        if (bytes[bytesLength-1] != 10){
             lineNum ++;
         }
     }
 
     /**
-     * 功能：计算单词数、并将单词装入集合、统计个数
+     * 计算单词数、并将单词装入集合、统计个数
      */
     public static void collectWord(){
         int checkWordResult = -1;
         for (int i = 0; i < bytesLength; i ++){
             if (isLetter(bytes[i])){
-                checkWordResult = checkWord(bytes, i, 4);
+                checkWordResult = checkWord(bytes, i, MIN_WORD_LETTER_NUM);
                 if (checkWordResult > 0){
                     String aWordString = subBytesToString(bytes, i, checkWordResult);
                     // System.out.println(aWordString);
@@ -104,7 +112,7 @@ public class Lib{
     }
 
     /**
-     * 功能：按照单词频率排序
+     * 按照单词频率排序
      */
     public static void sortWordMap(){
         wordList = new ArrayList<Map.Entry<String,Integer>>(wordMap.entrySet());
@@ -116,13 +124,13 @@ public class Lib{
     }
 
     /**
-     * 功能：取出字节数组中的某一段转成String返回
+     * 取出字节数组中的某一段转成String返回
      *
-     * 参数：byte[] bytes 字节数组
-     *      int start 开始下标
-     *      int end 截止下标
+     * @param bytes 字节数组
+     * @param start 开始下标
+     * @param end 截止下标
      *
-     * 返回：String aWordString 截取转成的字符串
+     * @return aWordString 截取转成的字符串
      */
     static String subBytesToString(byte[] bytes, int start, int end){
         if (end >= start){
@@ -134,13 +142,12 @@ public class Lib{
     }
 
     /**
-     * 功能：判断该换行字符所在行是否是非空白行
+     * 判断该换行字符所在行是否是非空白行
      *
-     * 参数：byte[] bytes 字节数组
-     *      int lineEnd 换行符下标（行末尾）
+     * @param bytes 字节数组
+     * @param lineEnd 换行符下标（行末尾）
      *
-     * 返回：boolean true 非空行
-     *      boolean fasle 是空行
+     * @return true 非空行 fasle 是空行
      */
     static boolean checkLine(byte[] bytes, int lineEnd){
         int notBlankCharNum = 0;
@@ -157,62 +164,57 @@ public class Lib{
     }
 
     /**
-     * 功能：判断byte字节是否是字母
+     * 判断byte字节是否是字母
      *
-     * 参数：byte b 字节
+     * @param b 字节
      *
-     * 返回：boolean true 是字母
-     *      boolean false 不是字母
+     * @return true 是字母 false 不是字母
     **/
     static boolean isLetter(byte b){
         return (b >= 97 && b <= 122) || (b >= 65 && b <= 90);
     }
 
     /**
-     * 功能：判断Byte字节是否是数字
+     * 判断Byte字节是否是数字
      *
-     * 参数：byte b 字节
+     * @param b 字节
      *
-     * 返回：boolean true 是数字
-     *      boolean false 不是数字
+     * @return true 是数字 false 不是数字
      */
     static boolean isNum(byte b){
         return (b >= 48 && b <= 57);
     }
 
     /**
-     * 功能：判断byte字节是否是空白字符
+     * 判断byte字节是否是空白字符
      *
-     * 参数：byte b 字节
+     * @param b 字节
      *
-     * 返回：boolean true 是空白字符
-     *      boolean false 不是空白字符
+     * @return true 是空白字符 false 不是空白字符
     **/
     static boolean isBlankChar(byte b){
-        // return (b == 32 || b == 10 || b == 9 || b == 13);
-        return (b <= 32);
+        return (b <= 32 || b == 127);
     }
 
     /**
-     * 功能：判断Byte字节是否是分隔符
+     * 判断Byte字节是否是分隔符
      *
-     * 参数：byte b 字节
+     * @param b 字节
      *
-     * 返回：boolean true 是分隔符
-     *      boolean false 不是分隔符
+     * @return true 是分隔符 false 不是分隔符
      */
     static boolean isSeparator(byte b){
         return !(isLetter(b)|| isNum(b));
     }
 
     /**
-     * 功能：判断从某个下标开始的一段长度是否是单词
+     * 判断从某个下标开始的一段长度是否是单词
      *
-     * 参数：byte[] bytes 字节数组
-     *      int start 开始下标
-     *      int minWordLength 满足最小需求的开头字母数
+     * @param bytes 字节数组
+     * @param start 开始下标
+     * @param minWordLength 满足最小需求的开头字母数
      *
-     * 返回：int < 0 不是单词，负的词末尾分隔符的下标
+     * @return int < 0 不是单词，负的词末尾分隔符的下标
      *      int > 0 是单词，单词末尾分隔符的下标
     **/
     static int checkWord(byte[] bytes, int start, int minWordLength){
