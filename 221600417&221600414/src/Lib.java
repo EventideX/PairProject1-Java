@@ -1,5 +1,7 @@
+import java.io.BufferedOutputStream;
+import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.Reader;
+import java.util.Map;
 
 /**
  * @description: function library
@@ -15,7 +17,7 @@ class Lib {
         return charInt >= 48 && charInt <= 57;
     }
 
-    private static boolean isDivision(int charInt) {
+    static boolean isDivision(int charInt) {
         return (charInt < 48 || (charInt > 57 && charInt < 65) || (charInt > 90 && charInt < 97) || charInt > 122);
     }
 
@@ -23,15 +25,22 @@ class Lib {
         return charInt <= 32 || charInt == 127;
     }
 
-    static int readToDivision(Reader reader) throws IOException {
-        int charInt, charNum = 0;
-        while ((charInt = reader.read()) != -1){
-            charNum++;
-            if(isDivision(charInt)){
-                break;
-            }
-        }
-        return charNum;
+    static void strOutFile(String s, String f) throws IOException{
+        BufferedOutputStream bf = new BufferedOutputStream(new FileOutputStream(f));
+        bf.write(s.getBytes());
+        bf.flush();
+    }
+
+    static void sortMapAndOut(Map<String, Integer> map, StringBuilder builder) {
+        map.entrySet()
+                .stream()
+                .sorted((e1, e2) -> {
+                    int cmp = e2.getValue().compareTo(e1.getValue());
+                    if (cmp == 0) return e1.getKey().compareTo(e2.getKey());
+                    else return cmp;
+                })
+                .limit(10)
+                .forEach(o -> builder.append("<").append(o.getKey()).append(">").append(": ").append(o.getValue()).append("\n"));
     }
 
 }
