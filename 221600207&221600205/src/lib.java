@@ -6,7 +6,7 @@ public class lib {
 	private int fRowCount = 0;//行数
 	private int fByteCount = 0;//字节数
 	private int maxWordNum = 10;//词频输出数
-	private HashMap<String,Integer> map = new HashMap<String,Integer>();//存放字词处
+	private LinkedHashMap<String,Integer> map = new LinkedHashMap<String,Integer>();//存放字词处
 	
 	public lib(String fName)
 	{
@@ -90,12 +90,12 @@ public class lib {
 	}
 	public void setMap(String fContent)
 	{
-		String [] ch = fContent.split(" |	|!|=|-|,|\\*|\\+|\\(|\\)|\\^|/|\\.|\\||@|#|~|`|%");
+		fContent = fContent.toLowerCase();
+		String [] ch = fContent.split("\\W+");//W非写字符，w写字符，s空白，d数字，[abc]abc任一，*+？{n}{n,m}
 		for(int i = 0; i< ch.length ;i++)
 		{
 			if(ch[i].length()>=4)
 			{
-				ch[i] = ch[i].toLowerCase();
 				if (isLower(ch[i].charAt(0)) && isLower(ch[i].charAt(1)) && isLower(ch[i].charAt(2)) && isLower(ch[i].charAt(3)) )
 				{
 					//System.out.print(ch[i]);
@@ -118,9 +118,12 @@ public class lib {
 			BufferedReader br = new BufferedReader(isr);
 			fWordCount = fByteCount = fRowCount = 0;
 			while ((fContent = br.readLine()) != null) {
-				fRowCount ++;
 				fByteCount += fContent.length()+1;//换行
-				setMap(fContent);
+				if(!fContent.equals("")) 	
+				{
+					fRowCount ++;
+					setMap(fContent);
+				}
 			}
 			fis.close();
 		} catch (FileNotFoundException e) {
