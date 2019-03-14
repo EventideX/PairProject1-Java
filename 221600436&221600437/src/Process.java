@@ -10,6 +10,7 @@ public class Process {
 //    public Process(Result result_class){
 //        resultClass=result_class;
 //    }
+    static Pattern p=Pattern.compile("(^|[^a-zA-Z0-9])([a-zA-Z]{4,}[a-zA-Z0-9]*)");//匹配规则
     public static void read_file(String file_name,String outputFileName, Result resultClass, int CodeMode,int outputSize) {//1 GBK
         MyBufferedReader bufferedReader = null;
         BufferedWriter bufferedWriter = null;
@@ -36,10 +37,9 @@ public class Process {
                     resultClass.line_count_plus();//统计行数
                     process_line_withRegularExpression(s,resultClass);
                 }
-
                 //process_line(s.toCharArray(), resultClass);
             }
-            System.out.println(i);
+            //System.out.println(i);
             resultClass.char_count_plus(i - 1);//统计换行符 实际行数减一
             //每次读一行结束
 
@@ -98,10 +98,9 @@ public class Process {
     }
 
     private static void process_line_withRegularExpression(String str, Result resultClass){
-        Pattern p=Pattern.compile("(^|[^a-z0-9])([a-z]{4,}[a-z0-9]*)");
         Matcher m=p.matcher(str);
         while(m.find()) {
-            System.out.println(m.group(2));
+            //System.out.println(m.group(2));
             resultClass.addWord(m.group(2));
         }
     }
