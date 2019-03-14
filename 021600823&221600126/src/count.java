@@ -5,10 +5,13 @@ import com.wordCount.wordHeap;
 public class count 
 {
 	static wordHeap weightTable; // 利用词堆，建立一个权重表
+	int weight;
 	
 	public count()
 	{
 		weightTable = new wordHeap();
+		weightTable.add("", 1); // 添加默认权重
+		//weight = 1;
 	}
 	
 	public void addWeight(String type, Integer value)// 添加类型权重
@@ -34,7 +37,7 @@ public class count
 	public boolean isCharacter(char c) // 判断是否是非字母数字字符
 	{
 		int x = (int)c;
-		if(x <= 48 || x >= 123 || (x >=58 && x <= 64) || (x >= 91 && x <= 96))
+		if(x <= 47 || x >= 123 || (x >=58 && x <= 64) || (x >= 91 && x <= 96))
 		{
 			return true;
 		}
@@ -70,7 +73,7 @@ public class count
 		return true;
 	}
 	
-	public int countCharacters(String input) // 统计字符数
+	public int countCharacters(String input, boolean all) // 统计字符数
 	{
 		int result = 0;
 		char[] charArray = input.toCharArray();
@@ -79,7 +82,12 @@ public class count
 			if(isAscii(charArray[index]))
 				result ++;
 		}
-		result ++; // readline()方法不返回换行符 自动+1
+		if(all) // 如果是基础需求 自动统计readline()方法省略的换行符
+			result ++;
+		else // 如果是进阶需求
+		{
+			
+		}
 		return result;
 	}
 	
@@ -98,48 +106,71 @@ public class count
 		return result;
 	}
 	
-	public int countWords(String input, HashMap<String, Integer> wordMap) // 统计单词数，并存入哈希表
+	public void addMap(String word, Integer weight, HashMap<String, Integer> wordMap) // 将单词加入哈希表中
 	{
-		int result = 0;
-		String word = "";
-		boolean isType = true; // 鉴于当前行的类型描述为input的第一个单词，设置一个Boolean来进行类型判定
-		int weight = 1; // 初始权重为一
-		input = input.toLowerCase(); // 转化为小写
+		if(wordMap.get(word) == null)
+			wordMap.put(word, weight);
+		else
+			wordMap.put(word, wordMap.get(word) + weight);
+	}
+	
+	public int cutWords(String input) // 分隔单词
+	{
 		char[] charArray = input.toCharArray();
 		for(int index = 0; index < charArray.length; index ++)
 		{
-			if(isCharacter(charArray[index])) // 出现非字母数字字符则进入开始判断
+			if(isCharacter(charArray[index])) // 出现非字母数字字符则返回下标
+				return index;
+		}
+		return charArray.length;
+	}
+	
+	public int cutSign(String input) // 分割符号
+	{
+		char[] charArray = input.toCharArray();
+		for(int index = 0; index < charArray.length; index ++)
+		{
+			if(!isCharacter(charArray[index])) // 出现非字母数字字符则返回下标
+				return index;
+		}
+		return charArray.length;
+	}
+	
+	public int countWords(String input, HashMap<String, Integer> wordMap, String type) // 统计单词数，并存入哈希表
+	{
+		int result = 0;
+		String word = "";
+		String sign = "";
+		int cut = 0;
+		weight = 1; // 初始权重为一
+		if(type != "")
+		{
+			int i = weightTable.isExist(type); // 判断权值表中是否含有此类，有则替换权值。
+			if(i != -1)
 			{
-				if(isWord(word)) // 是符合规范的单词，则存入哈希表中
-				{
-					if(wordMap.get(word) == null)
-						wordMap.put(word, weight);
-					else
-						wordMap.put(word, wordMap.get(word) + weight);
-					result ++;
-					if(isType) // 判断是否第一个单词
-					{
-						int i = weightTable.isExist(word); // 判断权值表中是否含有此类，有则替换权值。
-						if(i != -1)
-						{
-							weight = weightTable.heap.get(i).value;
-						}
-						isType = false;
-					}
-				}
-				word = "";
-			}
-			else
-			{
-				word += charArray[index];
+				weight = weightTable.heap.get(i).value;
 			}
 		}
-		if(isWord(word)) // 防止换行符导致最后一个单词漏读
+		input = input.toLowerCase(); // 转化为小写
+		cut = cutWords(input);
+		while(cut != input.length())
 		{
-			if(wordMap.get(word) == null)
-				wordMap.put(word, 1);
-			else
-				wordMap.put(word, wordMap.get(word) + 1);
+			word = input.substring(0, cut);
+			input = input.substring(cut);
+			if(isWord(word))
+			{
+				addMap(word, weight, wordMap);
+				result ++;
+			}
+			cut = cutSign(input);
+			sign = input.substring(0, cut);
+			input = input.substring(cut);
+			cut = cutWords(input);
+		}
+		word = input;
+		if(isWord(word)) // 防止最后一个单词漏读
+		{
+			addMap(word, weight, wordMap);
 			result ++;
 		}
 		return result;
