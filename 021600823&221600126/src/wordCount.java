@@ -37,8 +37,8 @@ public class wordCount
 		    }
 		}
 		BufferedWriter bw = new BufferedWriter(new FileWriter(output));
-		String content = br.readLine(); // 利用readline()函数读取每一行的值
-		while(content != null)
+		String content; // 利用readline()函数读取每一行的值
+		while((content = br.readLine()) != null)
 		{
 			String type = "";
 			if(!all)
@@ -49,12 +49,11 @@ public class wordCount
 				if(index == content.length())
 					continue;
 				type = content.substring(0, counter.cutWords(content));
-				content = content.substring(index + 1);
+				content = content.substring(index + 2); // 冒号与空格不计
 			}
 			characters += counter.countCharacters(content, all); // 字符计数
 			lines += counter.countLines(content); // 有效行计数
 			words += counter.countWords(content, wordMap, type); // 单词计数
-			content = br.readLine();
 		}
 		wordClassify(wordMap, wh); // 单词归类并进行
 		br.close();
