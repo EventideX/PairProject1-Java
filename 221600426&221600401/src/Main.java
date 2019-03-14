@@ -137,8 +137,7 @@ class WordsHandler{
 				i++;
 				if(i>10)
 					break;
-				if(i<10)
-					string+="<"+item.getKey()+">: "+item.getValue()+"\r\n";	
+				string+="<"+item.getKey()+">: "+item.getValue()+"\r\n";	
 			}
 			writer.write(string);
 			writer.close();
