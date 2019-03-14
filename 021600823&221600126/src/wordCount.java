@@ -20,7 +20,7 @@ public class wordCount
 	{
 		counter = new count();
 	}
-	public void countWords(String fileName, int top) throws IOException
+	public void countWords(String fileName, int top, boolean all) throws IOException // top为前几的词频
 	{
 		wordHeap wh = new wordHeap();
 		HashMap<String, Integer> wordMap = new HashMap<String, Integer>();
@@ -40,9 +40,20 @@ public class wordCount
 		String content = br.readLine(); // 利用readline()函数读取每一行的值
 		while(content != null)
 		{
-			characters += counter.countCharacters(content); // 字符计数
+			String type = "";
+			if(!all)
+			{
+				if(content.length() < 4)
+					continue;
+				int index = counter.cutWords(content); // 调用count类的单词分割，将第一个单词分割出来
+				if(index == content.length())
+					continue;
+				type = content.substring(0, counter.cutWords(content));
+				content = content.substring(index + 1);
+			}
+			characters += counter.countCharacters(content, all); // 字符计数
 			lines += counter.countLines(content); // 有效行计数
-			words += counter.countWords(content, wordMap); // 单词计数
+			words += counter.countWords(content, wordMap, type); // 单词计数
 			content = br.readLine();
 		}
 		wordClassify(wordMap, wh); // 单词归类并进行
