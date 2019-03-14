@@ -7,51 +7,41 @@ public class wordHeap
 	{
 		public String word;
 		public Integer value;
-		
+
 		wordValue(String word, Integer value)
 		{
 			this.word = word;
 			this.value = value;
 		}
 	}
-	
+
 	ArrayList<wordValue> heap;
-	
+
 	wordHeap()
 	{
-		heap = new ArrayList<wordValue>();
+		heap = new ArrayList<>();
 	}
-	
+
 	public void add(String word, Integer value)
 	{
 		wordValue wv = new wordValue(word, value);
 		heap.add(wv);
 	}
-	
-	public static int left(int index) // 左儿子
-	{
-		return 2*index;
-	}
-	public static int right(int index) // 右儿子
-	{
-		return 2*index+1;
-	}
-	
+
 	public boolean compare(int a, int b) // 比较两个键值对的顺序，返回ture则a在前
 	{
 		if(heap.get(a).value > heap.get(b).value) // 比较值
 			return true;
-		else if(heap.get(a).value == heap.get(b).value)
+		else if(heap.get(a).value.equals(heap.get(b).value))
 		{
 			int result = heap.get(a).word.compareTo(heap.get(b).word); //比较字典顺序
-			if(result <= 0)
-				return true;
+			return result <= 0;
 		}
-		
+
 		return false;
 	}
-	
-	public int isExist(String key) //主要用于在词堆中找相同词（查找权重）
+
+	int isExist(String key) //主要用于在词堆中找相同词（查找权重）
 	{
 		for(int i = 0; i < heap.size(); i ++)
 		{
@@ -61,29 +51,7 @@ public class wordHeap
 		}
 		return -1;
 	}
-	
-	public void adjustHeap(int i, int size) // 调整词堆
-	{
-		int index = i;
-		int lchild = left(i);
-		int rchild = right(i);
-		if(index <= (size-1) / 2)
-		{	
-			// 确保不是叶子节点
-			if(lchild <= size && !compare(index, lchild))
-				index = lchild;
-			if(rchild < size && !compare(index, rchild))
-				index = rchild;
-			// index此时为两个子节点中较大的值
-			if(i != index)
-			{
-				Collections.swap(heap, i, index);
-				//以index为根的子树往下继续调整
-				adjustHeap(index, size);
-			}
-		}
-	}
-	
+
 	public void insert(String word, Integer value) // 插入键值对
 	{
 		//在数组尾部添加,且注意下标为0的位置不放元素
@@ -93,8 +61,8 @@ public class wordHeap
 		heap.add(wv);
 		heapUp(heap.size() - 1);
 	}
-		
-	public void heapUp(int index) //上浮操作
+
+	private void heapUp(int index) //上浮操作
 	{
 		if(index > 1)
 		{
@@ -108,15 +76,15 @@ public class wordHeap
 			}
 		}
 	}
-	
-	public void delete(int index) // 删除键值对
+
+	void delete() // 删除键值对
 	{
-		heap.set(index, heap.get(heap.size() - 1)); //把最后的一个叶子的数值赋值给index位置
-		heapDown(index);
+		heap.set(1, heap.get(heap.size() - 1)); //把最后的一个叶子的数值赋值给index位置
+		heapDown(1);
 		heap.remove(heap.size() - 1);   // 移除
 	}
 
-	public void heapDown(int index) // 下沉操作
+	private void heapDown(int index) // 下沉操作
 	{
 		// 因为第一个位置不存放数据，不考虑在内，最后一个也要删除，不考虑在内
 		int n = heap.size()-2;
@@ -149,10 +117,10 @@ public class wordHeap
 			heapDown(child);
 		}
 	}
-	
+
 	public int size()
 	{
 		return heap.size();
 	}
 
-}
+} 
