@@ -1,5 +1,3 @@
-
-
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileWriter;
@@ -20,7 +18,6 @@ public class Main {
         String str2 = lib.countWord(content);
         String str3 = lib.countLine(content);
         String str4 = lib.countMostWord();
-        System.out.println(str1 + "\r\n" + str2 + "\r\n" + str3 + "\r\n" + str4);
         writeFile("result.txt", str1 + "\r\n" + str2 + "\r\n" + str3 + "\r\n" + str4);
     }
 
