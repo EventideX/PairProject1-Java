@@ -176,7 +176,7 @@ public class Main {
 			//输出频率最高的10个单词，频率相同输出字典序靠前的单词，String key排序
 			List<Map.Entry<String, Integer>> list = wordcount.topTenWord();
 	        for (int i = 0; i < 10 && i < list.size(); i++) {
-				System.out.print("<"+list.get(i).getKey()+">: "+list.get(i).getValue());
+				System.out.println("<"+list.get(i).getKey()+">: "+list.get(i).getValue());
 			}
 			
 		} catch (FileNotFoundException e) {
