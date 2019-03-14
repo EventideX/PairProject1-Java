@@ -84,10 +84,6 @@ public class count
 		}
 		if(all) // 如果是基础需求 自动统计readline()方法省略的换行符
 			result ++;
-		else // 如果是进阶需求
-		{
-			
-		}
 		return result;
 	}
 	
