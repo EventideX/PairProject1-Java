@@ -8,10 +8,8 @@ public class Main
 		Scanner sc = new Scanner(System.in);
 		String input = sc.next();
 		try {
-				wordCount wc = new wordCount();
-				wc.counter.addWeight("title", 1); // 设置权重
-				wc.counter.addWeight("abstract", 1); // 设置权重
-				wc.countWords(input, 10, true); // 选择输出单词数
+				wordCount wc = new wordCount("result.txt");
+				wc.countWords(input, 10, false); // 选择输出单词数
 			} catch (IOException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
