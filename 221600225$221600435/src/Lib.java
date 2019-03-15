@@ -1,7 +1,5 @@
-import javax.imageio.IIOException;
 import java.io.*;
 import java.util.*;
-import java.util.concurrent.locks.ReentrantLock;
 import java.util.regex.*;
 
 public class Lib {
@@ -25,8 +23,8 @@ public class Lib {
                 if ((ch >= 0 && ch <= 12) || (ch >= 14 && ch <= 127)) character++;
             }
         }catch(IOException e){
-                e.printStackTrace();
-            }finally {
+            e.printStackTrace();
+        }finally {
             if(reader!=null){
                 try{
                     reader.close();
@@ -70,7 +68,7 @@ public class Lib {
         rString.outString += "line:"+line+"\r\n";
     }
 
-    public static void wordMatch(File firstFile,Map<String,Integer>map)throws  Exception{
+    public static void wordMatch(File firstFile,Map<String,Integer>map,ResultString rString)throws  Exception{
         BufferedReader in =null;
         in = new BufferedReader(new InputStreamReader(new FileInputStream(firstFile), "gbk"));
 
@@ -112,8 +110,8 @@ public class Lib {
                 }
             }
         }
-
-        System.out.println("words"+wordNum);
+        rString.outString += "words:"+wordNum+"\r\n";
+        System.out.println("words:"+wordNum);
     }
 
     public static void wordSort(Map<String,Integer>map,ResultString rString){
@@ -128,6 +126,19 @@ public class Lib {
             rString.outString += "<"+item.getKey()+">:"+item.getValue()+"\r\n";
             if(num==9)break;
             else num++;
+        }
+    }
+
+    public static  void write(ResultString resultString){
+        try{
+            File fileWrite = new File("result.txt");
+            fileWrite.createNewFile();
+            FileWriter writer = new FileWriter(fileWrite);
+            BufferedWriter out =new BufferedWriter(writer);
+            out.write(resultString.outString);
+            out.flush();
+        }catch (IOException e){
+            e.printStackTrace();
         }
     }
 }
