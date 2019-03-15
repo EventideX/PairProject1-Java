@@ -3,28 +3,28 @@ import java.util.*;
 
 public class Lib{
 
-    // ĞĞÊı
+    // è¡Œæ•°
     private static int lineNum = 0;
 
-    // ×Ö·ûÊı
+    // å­—ç¬¦æ•°
     private static int charNum = 0;
 
-    // µ¥´ÊÊı£ºÖÁÉÙËÄ¸öÓ¢ÎÄ×ÖÄ¸¿ªÍ·£¬²»Çø·Ö´óĞ¡Ğ´
+    // å•è¯æ•°ï¼šè‡³å°‘å››ä¸ªè‹±æ–‡å­—æ¯å¼€å¤´ï¼Œä¸åŒºåˆ†å¤§å°å†™
     private static int wordNum = 0;
 
-    // µ¥´Ê¼¯ºÏ£º<µ¥´Ê, ÊıÄ¿>
+    // å•è¯é›†åˆï¼š<å•è¯, æ•°ç›®>
     private static Map<String, Integer> wordMap = null;
 
-    // ÅÅĞòºÃµÄµ¥´Ê¼¯ºÏ
+    // æ’åºå¥½çš„å•è¯é›†åˆ
     private static List<Map.Entry<String, Integer>> wordList = null;
 
-    // ×Ö½ÚÊı×é
+    // å­—èŠ‚æ•°ç»„
     private static byte[] bytes = null;
 
-    // ³¤¶È£º×Ö½ÚÊı×é³¤¶È
+    // é•¿åº¦ï¼šå­—èŠ‚æ•°ç»„é•¿åº¦
     private static int bytesLength = 0;
 
-    // µ¥´ÊËùĞè×îĞ¡¿ªÍ·×ÖÄ¸Êı
+    // å•è¯æ‰€éœ€æœ€å°å¼€å¤´å­—æ¯æ•°
     private static final int MIN_WORD_LETTER_NUM = 4;
 
     public static int getCharNum(){return charNum;}
@@ -39,37 +39,41 @@ public class Lib{
     }
 
     /**
-     * ³õÊ¼»¯¹¹Ôì
+     * åˆå§‹åŒ–æ„é€ 
      **/
     public Lib(byte[] bytes){
         this.bytes = bytes;
         this.bytesLength = bytes.length;
         this.wordMap = new TreeMap<String, Integer>();
+        charNum = 0;
+        wordNum = 0;
+        lineNum = 0;
+        wordList = null;
     }
 
     /**
-     * Ô¤´¦Àí
-     *      ½«´óĞ´×ÖÄ¸×ªÎªĞ¡Ğ´×ÖÄ¸
-     *      ¼ÆËã×Ö½ÚÊı×éÖĞµÄ×Ö·ûÊı¡¢°üÀ¨¿Õ×Ö·û¡¢//r//nËã×÷Ò»¸ö×Ö·û
-     *      ¼æÈİ\n»»ĞĞ
-     *      ¼ÆËã×Ö½ÚÊı×é°üº¬µÄĞĞÊı
+     * é¢„å¤„ç†
+     *      å°†å¤§å†™å­—æ¯è½¬ä¸ºå°å†™å­—æ¯
+     *      è®¡ç®—å­—èŠ‚æ•°ç»„ä¸­çš„å­—ç¬¦æ•°ã€åŒ…æ‹¬ç©ºå­—ç¬¦ã€//r//nç®—ä½œä¸€ä¸ªå­—ç¬¦
+     *      å…¼å®¹\næ¢è¡Œ
+     *      è®¡ç®—å­—èŠ‚æ•°ç»„åŒ…å«çš„è¡Œæ•°
      *
-     * @param bytes ×Ö½ÚÊı×é
+     * @param bytes å­—èŠ‚æ•°ç»„
      */
     public static void preproccess(){
-        // ¼ÆËã×Ö·ûÊı¡¢ĞĞÊı
+        // è®¡ç®—å­—ç¬¦æ•°ã€è¡Œæ•°
         for (int i = 0; i < bytesLength; i ++){
-            // Ô¤´¦Àí£¬´óĞ´×ÖÄ¸Í³Ò»×ªÎªĞ¡Ğ´×ÖÄ¸£¬Í¬Ê±¹ıÂË·ÇasciiÂë×Ö·û
+            // é¢„å¤„ç†ï¼Œå¤§å†™å­—æ¯ç»Ÿä¸€è½¬ä¸ºå°å†™å­—æ¯ï¼ŒåŒæ—¶è¿‡æ»¤éasciiç å­—ç¬¦
             if (bytes[i] >= 0 && bytes[i] < 128){
                 if (bytes[i] >= 65 && bytes[i] <= 90){
                     bytes[i] += 32;
                 }
                 if (bytes[i] == 10){
-                    // ¼ÆËãĞĞÊı
+                    // è®¡ç®—è¡Œæ•°
                     if (checkLine(bytes, i)){
                         lineNum ++;
                     }
-                    // µ±»»ĞĞÎª\nÊ±±£Ö¤²»ÒÅÂ©×Ö·û
+                    // å½“æ¢è¡Œä¸º\næ—¶ä¿è¯ä¸é—æ¼å­—ç¬¦
                     if (i-1 >= 0 && bytes[i-1] != 13){
                         charNum ++;
                     }
@@ -78,14 +82,14 @@ public class Lib{
                 }
             }
         }
-        // ×¢Òâ×îºóÒ»ĞĞ²»ÒÔ»Ø³µ½áÎ²µÄÇé¿ö£¬Í¬ÑùËã×÷Ò»ĞĞ
-        if (checkLine(bytes, bytesLength-1)){
+        // æ³¨æ„æœ€åä¸€è¡Œä¸ä»¥å›è½¦ç»“å°¾çš„æƒ…å†µï¼ŒåŒæ ·ç®—ä½œä¸€è¡Œ
+        if (bytes[bytesLength-1] != 10 && checkLine(bytes, bytesLength-1)){
             lineNum ++;
         }
     }
 
     /**
-     * ¼ÆËãµ¥´ÊÊı¡¢²¢½«µ¥´Ê×°Èë¼¯ºÏ¡¢Í³¼Æ¸öÊı
+     * è®¡ç®—å•è¯æ•°ã€å¹¶å°†å•è¯è£…å…¥é›†åˆã€ç»Ÿè®¡ä¸ªæ•°
      */
     public static void collectWord(){
         int checkWordResult = -1;
@@ -95,17 +99,17 @@ public class Lib{
                 if (checkWordResult > 0){
                     String aWordString = subBytesToString(bytes, i, checkWordResult);
                     // System.out.println(aWordString);
-                    // ´æÈë¼¯ºÏÖĞ
+                    // å­˜å…¥é›†åˆä¸­
                     if (wordMap.containsKey(aWordString)){
                         wordMap.put(aWordString, wordMap.get(aWordString)+1);
                     } else{
                         wordMap.put(aWordString, 1);
                     }
                     wordNum ++;
-                    // Ìø×ªµ¥´ÊÄ©Î²
+                    // è·³è½¬å•è¯æœ«å°¾
                     i = checkWordResult;
                 } else{
-                    // ²»ÊÇµ¥´Ê£¬µ«ÊÇÍ¬ÑùÌø×ªµ½´ÊÄ©Î²
+                    // ä¸æ˜¯å•è¯ï¼Œä½†æ˜¯åŒæ ·è·³è½¬åˆ°è¯æœ«å°¾
                     i = - checkWordResult;
                 }
                 // System.out.println(checkWordResult);
@@ -114,7 +118,7 @@ public class Lib{
     }
 
     /**
-     * °´ÕÕµ¥´ÊÆµÂÊÅÅĞò
+     * æŒ‰ç…§å•è¯é¢‘ç‡æ’åº
      */
     public static void sortWordMap(){
         wordList = new ArrayList<Map.Entry<String,Integer>>(wordMap.entrySet());
@@ -126,13 +130,13 @@ public class Lib{
     }
 
     /**
-     * È¡³ö×Ö½ÚÊı×éÖĞµÄÄ³Ò»¶Î×ª³ÉString·µ»Ø
+     * å–å‡ºå­—èŠ‚æ•°ç»„ä¸­çš„æŸä¸€æ®µè½¬æˆStringè¿”å›
      *
-     * @param bytes ×Ö½ÚÊı×é
-     * @param start ¿ªÊ¼ÏÂ±ê
-     * @param end ½ØÖ¹ÏÂ±ê
+     * @param bytes å­—èŠ‚æ•°ç»„
+     * @param start å¼€å§‹ä¸‹æ ‡
+     * @param end æˆªæ­¢ä¸‹æ ‡
      *
-     * @return aWordString ½ØÈ¡×ª³ÉµÄ×Ö·û´®
+     * @return aWordString æˆªå–è½¬æˆçš„å­—ç¬¦ä¸²
      */
     static String subBytesToString(byte[] bytes, int start, int end){
         if (end >= start){
@@ -144,21 +148,21 @@ public class Lib{
     }
 
     /**
-     * ÅĞ¶Ï¸Ã»»ĞĞ×Ö·ûËùÔÚĞĞÊÇ·ñÊÇ·Ç¿Õ°×ĞĞ
+     * åˆ¤æ–­è¯¥æ¢è¡Œå­—ç¬¦æ‰€åœ¨è¡Œæ˜¯å¦æ˜¯éç©ºç™½è¡Œ
      *
-     * @param bytes ×Ö½ÚÊı×é
-     * @param lineEnd »»ĞĞ·ûÏÂ±ê£¨ĞĞÄ©Î²£©
+     * @param bytes å­—èŠ‚æ•°ç»„
+     * @param lineEnd æ¢è¡Œç¬¦ä¸‹æ ‡ï¼ˆè¡Œæœ«å°¾ï¼‰
      *
-     * @return true ·Ç¿ÕĞĞ fasle ÊÇ¿ÕĞĞ
+     * @return true éç©ºè¡Œ fasle æ˜¯ç©ºè¡Œ
      */
     static boolean checkLine(byte[] bytes, int lineEnd){
         int notBlankCharNum = 0;
         for (int i = lineEnd-1; i >= 0; i --){
             if (bytes[i] == 10){
-                // Óöµ½Ç°Ò»ĞĞ·µ»Ø
+                // é‡åˆ°å‰ä¸€è¡Œè¿”å›
                 break;
             } else if (!isBlankChar(bytes[i])){
-                // µ±Ç°×ÖÄ¸²»ÊÇ¿Õ¸ñ»òÖÆ±í·û
+                // å½“å‰å­—æ¯ä¸æ˜¯ç©ºæ ¼æˆ–åˆ¶è¡¨ç¬¦
                 notBlankCharNum ++;
             }
         }
@@ -166,58 +170,58 @@ public class Lib{
     }
 
     /**
-     * ÅĞ¶Ïbyte×Ö½ÚÊÇ·ñÊÇ×ÖÄ¸
+     * åˆ¤æ–­byteå­—èŠ‚æ˜¯å¦æ˜¯å­—æ¯
      *
-     * @param b ×Ö½Ú
+     * @param b å­—èŠ‚
      *
-     * @return true ÊÇ×ÖÄ¸ false ²»ÊÇ×ÖÄ¸
+     * @return true æ˜¯å­—æ¯ false ä¸æ˜¯å­—æ¯
      **/
     static boolean isLetter(byte b){
         return (b >= 97 && b <= 122) || (b >= 65 && b <= 90);
     }
 
     /**
-     * ÅĞ¶ÏByte×Ö½ÚÊÇ·ñÊÇÊı×Ö
+     * åˆ¤æ–­Byteå­—èŠ‚æ˜¯å¦æ˜¯æ•°å­—
      *
-     * @param b ×Ö½Ú
+     * @param b å­—èŠ‚
      *
-     * @return true ÊÇÊı×Ö false ²»ÊÇÊı×Ö
+     * @return true æ˜¯æ•°å­— false ä¸æ˜¯æ•°å­—
      */
     static boolean isNum(byte b){
         return (b >= 48 && b <= 57);
     }
 
     /**
-     * ÅĞ¶Ïbyte×Ö½ÚÊÇ·ñÊÇ¿Õ°××Ö·û
+     * åˆ¤æ–­byteå­—èŠ‚æ˜¯å¦æ˜¯ç©ºç™½å­—ç¬¦
      *
-     * @param b ×Ö½Ú
+     * @param b å­—èŠ‚
      *
-     * @return true ÊÇ¿Õ°××Ö·û false ²»ÊÇ¿Õ°××Ö·û
+     * @return true æ˜¯ç©ºç™½å­—ç¬¦ false ä¸æ˜¯ç©ºç™½å­—ç¬¦
      **/
     static boolean isBlankChar(byte b){
         return (b <= 32 || b == 127);
     }
 
     /**
-     * ÅĞ¶ÏByte×Ö½ÚÊÇ·ñÊÇ·Ö¸ô·û
+     * åˆ¤æ–­Byteå­—èŠ‚æ˜¯å¦æ˜¯åˆ†éš”ç¬¦
      *
-     * @param b ×Ö½Ú
+     * @param b å­—èŠ‚
      *
-     * @return true ÊÇ·Ö¸ô·û false ²»ÊÇ·Ö¸ô·û
+     * @return true æ˜¯åˆ†éš”ç¬¦ false ä¸æ˜¯åˆ†éš”ç¬¦
      */
     static boolean isSeparator(byte b){
         return !(isLetter(b)|| isNum(b));
     }
 
     /**
-     * ÅĞ¶Ï´ÓÄ³¸öÏÂ±ê¿ªÊ¼µÄÒ»¶Î³¤¶ÈÊÇ·ñÊÇµ¥´Ê
+     * åˆ¤æ–­ä»æŸä¸ªä¸‹æ ‡å¼€å§‹çš„ä¸€æ®µé•¿åº¦æ˜¯å¦æ˜¯å•è¯
      *
-     * @param bytes ×Ö½ÚÊı×é
-     * @param start ¿ªÊ¼ÏÂ±ê
-     * @param minWordLength Âú×ã×îĞ¡ĞèÇóµÄ¿ªÍ·×ÖÄ¸Êı
+     * @param bytes å­—èŠ‚æ•°ç»„
+     * @param start å¼€å§‹ä¸‹æ ‡
+     * @param minWordLength æ»¡è¶³æœ€å°éœ€æ±‚çš„å¼€å¤´å­—æ¯æ•°
      *
-     * @return int < 0 ²»ÊÇµ¥´Ê£¬¸ºµÄ´ÊÄ©Î²·Ö¸ô·ûµÄÏÂ±ê
-     *      int > 0 ÊÇµ¥´Ê£¬µ¥´ÊÄ©Î²·Ö¸ô·ûµÄÏÂ±ê
+     * @return int < 0 ä¸æ˜¯å•è¯ï¼Œè´Ÿçš„è¯æœ«å°¾åˆ†éš”ç¬¦çš„ä¸‹æ ‡
+     *      int > 0 æ˜¯å•è¯ï¼Œå•è¯æœ«å°¾åˆ†éš”ç¬¦çš„ä¸‹æ ‡
      **/
     static int checkWord(byte[] bytes, int start, int minWordLength){
         int bytesLength = bytes.length;
@@ -228,21 +232,21 @@ public class Lib{
             checkWordResult = -1;
         } else{
             for (; i < start + minWordLength && i < bytesLength; i++){
-                // Âú×ã×îĞ¡ĞèÇóµÄ¿ªÍ·×ÖÄ¸Êı
+                // æ»¡è¶³æœ€å°éœ€æ±‚çš„å¼€å¤´å­—æ¯æ•°
                 if (! isLetter(bytes[i])){
                     checkWordResult = -2;
                     break;
                 }
             }
-            // ÒÑµ½½áÎ²£¬²»Âú×ã×îĞ¡¿ªÍ·×ÖÄ¸Êı
+            // å·²åˆ°ç»“å°¾ï¼Œä¸æ»¡è¶³æœ€å°å¼€å¤´å­—æ¯æ•°
             if (i == bytesLength && i - start < minWordLength){
                 checkWordResult = -3;
             }
         }
         for (; i < bytesLength; i++){
-            // ±éÀúµ½´Ê½áÊø£¬·µ»Ø´ÊÄ©Î²µÄÏÂ±ê
+            // éå†åˆ°è¯ç»“æŸï¼Œè¿”å›è¯æœ«å°¾çš„ä¸‹æ ‡
             if (isSeparator(bytes[i])){
-                // ×Ö·û²»ÊÇ·Ö¸ô·û
+                // å­—ç¬¦ä¸æ˜¯åˆ†éš”ç¬¦
                 break;
             }
         }
