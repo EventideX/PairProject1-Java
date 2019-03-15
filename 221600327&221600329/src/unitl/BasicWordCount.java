@@ -153,9 +153,11 @@ public class BasicWordCount {
 	        if (topN.peek().getCountNum() < entry.getValue()) {
 	        	topN.poll();
 	        	topN.offer(new Word(entry.getKey(), entry.getValue()));
-	        }else if(topN.peek().getKey().compareTo(entry.getKey())>0){
-	        	topN.poll();
-		        topN.offer(new Word(entry.getKey(), entry.getValue()));
+	        }else if(topN.peek().getCountNum() == entry.getValue()) {
+		        if(topN.peek().getKey().compareTo(entry.getKey())>0){
+		        	topN.poll();
+			        topN.offer(new Word(entry.getKey(), entry.getValue()));
+		        }
 	        }
 	      }
 	    }
