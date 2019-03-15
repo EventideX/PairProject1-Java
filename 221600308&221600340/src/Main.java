@@ -19,14 +19,14 @@ public class WordCount {
 	public static void main(String[] args) throws Exception {
 		try {
  			if(args.length!=1) {
-				System.out.println("ÇëÊäÈëÕıÈ·µÄ²ÎÊı!");
+				System.out.println("è¯·è¾“å…¥æ­£ç¡®çš„å‚æ•°!");
 				return;
 			}
 			File file = new File(args[0]);
 			String pathname = file.getPath();
 			Reader myReader = new FileReader(pathname);
 			Reader myBufferedReader = new BufferedReader(myReader);
-			// ¶ÔÎÄ±¾´¦Àí
+			// å¯¹æ–‡æœ¬å¤„ç†
 			CharArrayWriter tempStream = new CharArrayWriter();
 			int i = -1;
 			do {
@@ -56,21 +56,21 @@ public class WordCount {
 			int wordline = 0;
 			int noline = 0;
 			int wordcount = 0;
-			//´æ´¢¹ıÂËºóµ¥´ÊµÄÁĞ±í
+			//å­˜å‚¨è¿‡æ»¤åå•è¯çš„åˆ—è¡¨
 			List<String> lists = new ArrayList<String>(); 
 			String readLine = null;
-			//¿ªÊ¼±éÀúÄÚÈİ
+			//å¼€å§‹éå†å†…å®¹
 			for(int n=0;n<fileText.length;n++) {
 				readLine=fileText[n];
-				// ¹ıÂËÎŞĞ§ĞĞ
+				// è¿‡æ»¤æ— æ•ˆè¡Œ
 				if (!(readLine.equals("") || readLine.equals("	") || readLine.equals(" "))) {
 					wordline++;
 				}
-				// ¹ıÂË³öÖ»º¬ÓĞ×ÖÄ¸µÄµ¥´Ê
+				// è¿‡æ»¤å‡ºåªå«æœ‰å­—æ¯çš„å•è¯
 				String[] wordsArr1 = readLine.split("[^a-zA-Z0-9]"); 
 				characterscount += readLine.length();
 				for (String word : wordsArr1) {
-					if (word.length() != 0) { // Ö»°üº¬
+					if (word.length() != 0) { // åªåŒ…å«
 						while (word.length()!=0 && !(word.charAt(0) >= 97 && word.charAt(0) <= 122)) {
 							word = word.substring(1, word.length());
 						}
@@ -83,7 +83,7 @@ public class WordCount {
 			characterscount+=getCount(content,"\r\n");
 			// 
 			Map<String, Integer> wordsCount = new TreeMap<String, Integer>();
-			// µ¥´ÊµÄ´ÊÆµÍ³¼Æ
+			// å•è¯çš„è¯é¢‘ç»Ÿè®¡
 			for (String li : lists) {
 				if (wordsCount.get(li) != null) {
 					wordsCount.put(li, wordsCount.get(li) + 1);
@@ -102,7 +102,7 @@ public class WordCount {
 		ArrayList<Map.Entry<String, Integer>> list = new ArrayList<Map.Entry<String, Integer>>(oldmap.entrySet());
 		Collections.sort(list, new Comparator<Map.Entry<String, Integer>>() {
 			public int compare(Entry<String, Integer> o1, Entry<String, Integer> o2) {
-				return o2.getValue() - o1.getValue(); // ½µĞò
+				return o2.getValue() - o1.getValue(); // é™åº
 			}
 		});
 		try {
