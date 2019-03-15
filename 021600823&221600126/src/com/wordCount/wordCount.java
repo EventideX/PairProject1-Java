@@ -10,8 +10,8 @@ import java.util.HashMap;
 import java.util.Map.Entry;
 
 public class wordCount {
-    private String output; // Ä¬ÈÏÊä³öÎÄ¼ş
-    // ¼ÆÊı
+    private String output; // é»˜è®¤è¾“å‡ºæ–‡ä»¶
+    // è®¡æ•°
     private int characters = 0;
     private int lines = 0;
     private int words = 0;
@@ -27,12 +27,12 @@ public class wordCount {
         counter.addWeight("abstract", 1);
     }
 
-    public void countWords(String fileName, int top, boolean all) throws IOException // topÎªÇ°¼¸µÄ´ÊÆµ
+    public void countWords(String fileName, int top, boolean all) throws IOException // topä¸ºå‰å‡ çš„è¯é¢‘
     {
         wordHeap wh = new wordHeap();
         HashMap<String, Integer> wordMap = new HashMap<>();
         BufferedReader br = new BufferedReader(new FileReader(fileName));
-        // ÅĞ¶ÏÊÇ·ñ´æÔÚÊä³öÎÄ¼ş£¬²»´æÔÚÔò´´½¨
+        // åˆ¤æ–­æ˜¯å¦å­˜åœ¨è¾“å‡ºæ–‡ä»¶ï¼Œä¸å­˜åœ¨åˆ™åˆ›å»º
         File file = new File(output);
         if (!file.exists()) {
             try {
@@ -42,23 +42,21 @@ public class wordCount {
             }
         }
         BufferedWriter bw = new BufferedWriter(new FileWriter(output));
-        String content; // ÀûÓÃreadline()º¯Êı¶ÁÈ¡Ã¿Ò»ĞĞµÄÖµ
+        String content; // åˆ©ç”¨readline()å‡½æ•°è¯»å–æ¯ä¸€è¡Œçš„å€¼
         while ((content = br.readLine()) != null) {
             String type = "";
             if (!all) {
-                int index = counter.cutWords(content); // µ÷ÓÃcountÀàµÄµ¥´Ê·Ö¸î£¬½«µÚÒ»¸öµ¥´Ê·Ö¸î³öÀ´
-                if (index == content.length())
+                int index = counter.cutWords(content); // è°ƒç”¨countç±»çš„å•è¯åˆ†å‰²ï¼Œå°†ç¬¬ä¸€ä¸ªå•è¯åˆ†å‰²å‡ºæ¥
+                if ((index + 2) <= content.length())
                     continue;
                 type = content.toLowerCase().substring(0, counter.cutWords(content));
-                content = content.substring(index + 2); // Ã°ºÅÓë¿Õ¸ñ²»¼Æ
-                if(!counter.isWord(type))
-                	continue;
+                content = content.substring(index + 2); // å†’å·ä¸ç©ºæ ¼ä¸è®¡
             }
-            characters += counter.countCharacters(content, true); // ×Ö·û¼ÆÊı
-            lines += counter.countLines(content); // ÓĞĞ§ĞĞ¼ÆÊı
-            words += counter.countWords(content, wordMap, type); // µ¥´Ê¼ÆÊı
+            characters += counter.countCharacters(content, true); // å­—ç¬¦è®¡æ•°
+            lines += counter.countLines(content); // æœ‰æ•ˆè¡Œè®¡æ•°
+            words += counter.countWords(content, wordMap, type); // å•è¯è®¡æ•°
         }
-        wordClassify(wordMap, wh); // µ¥´Ê¹éÀà²¢½øĞĞ
+        wordClassify(wordMap, wh); // å•è¯å½’ç±»å¹¶è¿›è¡Œ
         br.close();
         bw.write("character:" + characters);
         bw.newLine();
@@ -67,7 +65,7 @@ public class wordCount {
         bw.write("lines:" + lines);
         bw.newLine();
         top = (top < wh.size() - 1) ? top : wh.size() - 1;
-        for (int i = 1; i <= top; i++) // ¶ÑÅÅĞò
+        for (int i = 1; i <= top; i++) // å †æ’åº
         {
             bw.write("<" + wh.heap.get(1).word + ">: " + wh.heap.get(1).value);
             bw.newLine();
@@ -77,15 +75,15 @@ public class wordCount {
         bw.close();
     }
 
-    private void wordClassify(HashMap<String, Integer> wordMap, wordHeap wh) // µ¥´Ê¹éÀà£¬½«¹şÏ£±íÖĞµÄµ¥´Ê¹éÈë´Ê¶Ñ£¨×î´ó¶Ñ£©
+    private void wordClassify(HashMap<String, Integer> wordMap, wordHeap wh) // å•è¯å½’ç±»ï¼Œå°†å“ˆå¸Œè¡¨ä¸­çš„å•è¯å½’å…¥è¯å †ï¼ˆæœ€å¤§å †ï¼‰
     {
         String word;
-        java.util.Iterator<Entry<String, Integer>> iter = wordMap.entrySet().iterator(); // ¼üÖµ¶Ô±éÀú¹şÏ£±í
+        java.util.Iterator<Entry<String, Integer>> iter = wordMap.entrySet().iterator(); // é”®å€¼å¯¹éå†å“ˆå¸Œè¡¨
         Integer value;
         while (iter.hasNext()) {
             Entry<String, Integer> entry = iter.next();
-            word = entry.getKey(); // »ñÈ¡key
-            value = entry.getValue(); // »ñÈ¡value
+            word = entry.getKey(); // è·å–key
+            value = entry.getValue(); // è·å–value
             wh.insert(word, value);
         }
     }
