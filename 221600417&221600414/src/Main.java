@@ -1,5 +1,6 @@
 import java.io.*;
-import java.util.*;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * @description: main
@@ -17,7 +18,9 @@ public class Main {
         boolean haveChar = false, letterCheckAble = true;
         StringBuilder letterBuilder = new StringBuilder();
 
-        Reader reader = new InputStreamReader(new FileInputStream(args[0]));
+        File f = new File(args[0]);
+
+        Reader reader = new BufferedReader(new InputStreamReader(new FileInputStream(f)));
         int charInt, preCharInt = -1;
         while ((charInt = reader.read()) != -1) {
             if(charInt != 10 && preCharInt != 13){
@@ -64,9 +67,9 @@ public class Main {
             letterMap.merge(letter, 1, (a, b) -> a + b);
         }
         if (haveChar)   lineNum++;
-        resultBuilder.append("characters: ").append(charNum).append("\n")
-                .append("words: ").append(wordNum).append("\n")
-                .append("lines: ").append(lineNum).append("\n");
+        resultBuilder.append("characters: ").append(charNum).append("\r\n")
+                .append("words: ").append(wordNum).append("\r\n")
+                .append("lines: ").append(lineNum).append("\r\n");
         Lib.sortMapAndOut(letterMap, resultBuilder);
         Lib.strOutFile(resultBuilder.toString(), "result.txt");
     }

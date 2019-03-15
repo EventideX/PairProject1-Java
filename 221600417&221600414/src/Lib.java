@@ -25,7 +25,7 @@ class Lib {
         return charInt <= 32 || charInt == 127;
     }
 
-    static void strOutFile(String s, String f) throws IOException{
+    static void strOutFile(String s, String f) throws IOException {
         BufferedOutputStream bf = new BufferedOutputStream(new FileOutputStream(f));
         bf.write(s.getBytes());
         bf.flush();
@@ -40,7 +40,7 @@ class Lib {
                     else return cmp;
                 })
                 .limit(10)
-                .forEach(o -> builder.append("<").append(o.getKey()).append(">").append(": ").append(o.getValue()).append("\n"));
+                .forEach(o -> builder.append("<").append(o.getKey()).append(">").append(": ").append(o.getValue()).append("\r\n"));
     }
 
 }
