@@ -47,7 +47,7 @@ public class wordCount {
             String type = "";
             if (!all) {
                 int index = counter.cutWords(content); // 调用count类的单词分割，将第一个单词分割出来
-                if ((index + 2) <= content.length())
+                if ((index + 2) >= content.length())
                     continue;
                 type = content.toLowerCase().substring(0, counter.cutWords(content));
                 content = content.substring(index + 2); // 冒号与空格不计
