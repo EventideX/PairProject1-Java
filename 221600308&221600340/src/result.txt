@@ -1,0 +1,7 @@
+characters: 257
+words: 5
+lines: 5
+<abcdefghijklmnopqrstuvwxyz>: 2
+<aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa>: 1
+<aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa>: 1
+<ssssssssssssssssssssssssssssssssssssssss>: 1
