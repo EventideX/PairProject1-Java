@@ -43,6 +43,7 @@ public class BasicWordCount {
 		//在windows中，换行符为/r/n,统计时需要替换为/n
 		return stringBuffer.toString().replaceAll("\r\n", "\n").length();	
 	}
+
 	/**
 	 * 计算文件单词数
 	 * @param fileName 文件名
@@ -71,23 +72,27 @@ public class BasicWordCount {
 				e.printStackTrace();
 			}
 		}
+		
 		//用分隔符"|"替换字符串中非字母数字的字符
 		String noLetterOrDigitalRegex = "[^a-zA-Z0-9]";
 		String updateString = stringBuffer.toString().toLowerCase().replaceAll(noLetterOrDigitalRegex, "|");
-		//按分隔符"|"，分割字符串
-		String splitStrings[] =  updateString.split("\\|");
-		
-		String regex = "[a-z]{4}.*";
 		long countOfWord = 0;
-		for(int i = 0; i < splitStrings.length; i++) {
-			if(Pattern.matches(regex, splitStrings[i])) {
+		int startPosition = 0;
+		int endPosition = 0;
+		String regex = "^[a-z]{4}[a-z0-9]*";
+		//计算到次数
+		for(int i = 0; i<updateString.length();) {
+			startPosition = i;
+			endPosition = i;
+			while(Character.isLetterOrDigit(updateString.charAt(i++))) {
+				endPosition++;
+			}
+			if(Pattern.matches(regex, updateString.substring(startPosition, endPosition))) {
 				countOfWord++;
 			}
 		}
-		
 		return countOfWord;
 	}
-
 	/**
 	 * 计算出现次数top10的单词及其词频
 	 * @param fileName 文件名
