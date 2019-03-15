@@ -24,7 +24,6 @@ public class Main{
 
     /**
      * 程序入口
-     * @param args[0] 输入文件名
      */
     public static void main(String[] args) {
         // 初始化
@@ -36,8 +35,10 @@ public class Main{
             System.exit(1);
         }
 
-        // 读取文件
+        // 读取文件、过滤非ascii字符
         inputFileBytes = readFileToBytes(inputFileName);
+        inputFileBytes = filterAscii(inputFileBytes);
+        // System.out.println(new String(inputFileBytes));
 
         Lib core = new Lib(inputFileBytes);
 
@@ -70,14 +71,14 @@ public class Main{
 
         try {
             File file = new File(fileName);
-            if (file.isFile() && file.exists()){
+//            if (file.isFile() && file.exists()){
                 FileInputStream reader = new FileInputStream(file);
                 Long fileLength = file.length();
-				// System.out.println("fileLength: " + fileLength);
+                // System.out.println("fileLength: " + fileLength);
                 fileBytes = new byte[fileLength.intValue()];
                 reader.read(fileBytes);
                 reader.close();
-            }
+//            }
         }
         catch(FileNotFoundException e){
             System.out.println("文件不存在");
@@ -88,6 +89,26 @@ public class Main{
         }
 
         return fileBytes;
+    }
+
+    /**
+     * 过滤掉字节数组中的非ascii码字符
+     *
+     * @param bytes 字节数组
+     *
+     * @return noAsciiBytes
+     */
+    static byte[] filterAscii(byte[] bytes){
+        byte[] noAsciiBytes_ = new byte[bytes.length];
+        int j = 0;
+        for (int i = 0; i < bytes.length; i++){
+            if (bytes[i] < 128 && bytes[i] >= 0){
+                noAsciiBytes_[j++] = bytes[i];
+            }
+        }
+        byte[] noAsciiBytes = new byte[j];
+        System.arraycopy(noAsciiBytes_, 0, noAsciiBytes, 0, j);
+        return noAsciiBytes;
     }
 
     /**
@@ -111,8 +132,8 @@ public class Main{
      */
     static void writeResult(){
         String resultString = String.format(
-            "characters: %d\nwords: %d\nlines: %d\n",
-            charNum, wordNum, lineNum
+                "characters: %d\nwords: %d\nlines: %d\n",
+                charNum, wordNum, lineNum
         );
         int i = 0;
         for (Map.Entry<String, Integer> entry : wordList) {

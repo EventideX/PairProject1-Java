@@ -23,9 +23,9 @@ public class Lib{
 
     // 长度：字节数组长度
     private static int bytesLength = 0;
-	
-	// 单词所需最小开头字母数
-	private static final int MIN_WORD_LETTER_NUM = 4;
+
+    // 单词所需最小开头字母数
+    private static final int MIN_WORD_LETTER_NUM = 4;
 
     public static int getCharNum(){return charNum;}
     public static int getWordNum(){return wordNum;}
@@ -40,7 +40,7 @@ public class Lib{
 
     /**
      * 初始化构造
-    **/
+     **/
     public Lib(byte[] bytes){
         this.bytes = bytes;
         this.bytesLength = bytes.length;
@@ -51,7 +51,7 @@ public class Lib{
      * 预处理
      *      将大写字母转为小写字母
      *      计算字节数组中的字符数、包括空字符、//r//n算作一个字符
-	 *      兼容\n换行
+     *      兼容\n换行
      *      计算字节数组包含的行数
      *
      * @param bytes 字节数组
@@ -59,25 +59,27 @@ public class Lib{
     public static void preproccess(){
         // 计算字符数、行数
         for (int i = 0; i < bytesLength; i ++){
-            // 预处理，大写字母统一转为小写字母
-            if (bytes[i] >= 65 && bytes[i] <= 90){
-                bytes[i] += 32;
-            }
-            if (bytes[i] == 10){
-                // 计算行数
-                if (checkLine(bytes, i)){
-                    lineNum ++;
+            // 预处理，大写字母统一转为小写字母，同时过滤非ascii码字符
+            if (bytes[i] >= 0 && bytes[i] < 128){
+                if (bytes[i] >= 65 && bytes[i] <= 90){
+                    bytes[i] += 32;
                 }
-				// 当换行为\n时保证不遗漏字符
-				if (i-1 >= 0 && bytes[i-1] != 13){
-					charNum ++;
-				}
-            }else{
-                charNum ++;
+                if (bytes[i] == 10){
+                    // 计算行数
+                    if (checkLine(bytes, i)){
+                        lineNum ++;
+                    }
+                    // 当换行为\n时保证不遗漏字符
+                    if (i-1 >= 0 && bytes[i-1] != 13){
+                        charNum ++;
+                    }
+                }else{
+                    charNum ++;
+                }
             }
         }
         // 注意最后一行不以回车结尾的情况，同样算作一行
-        if (bytes[bytesLength-1] != 10){
+        if (checkLine(bytes, bytesLength-1)){
             lineNum ++;
         }
     }
@@ -169,7 +171,7 @@ public class Lib{
      * @param b 字节
      *
      * @return true 是字母 false 不是字母
-    **/
+     **/
     static boolean isLetter(byte b){
         return (b >= 97 && b <= 122) || (b >= 65 && b <= 90);
     }
@@ -191,7 +193,7 @@ public class Lib{
      * @param b 字节
      *
      * @return true 是空白字符 false 不是空白字符
-    **/
+     **/
     static boolean isBlankChar(byte b){
         return (b <= 32 || b == 127);
     }
@@ -216,7 +218,7 @@ public class Lib{
      *
      * @return int < 0 不是单词，负的词末尾分隔符的下标
      *      int > 0 是单词，单词末尾分隔符的下标
-    **/
+     **/
     static int checkWord(byte[] bytes, int start, int minWordLength){
         int bytesLength = bytes.length;
         int i = start;
