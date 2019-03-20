@@ -8,9 +8,10 @@ public class Main {
     public static void main(String args[]) throws IOException {
         //读取文件成n行
         List<StringBuilder> stringBuilders=Lib.readFile(args[args.length-1]);
-        BufferedWriter bf=new BufferedWriter(new FileWriter(new File("result.txt")));
+        BufferedOutputStream bf=new BufferedOutputStream(new FileOutputStream(new File("result.txt")));
+
         //输出字符数abcdefg
-        bf.write(("characters: "+Lib.countChars(stringBuilders)+"\r\n"));
+        bf.write(("characters: "+Lib.countChars(stringBuilders)+"\r\n").getBytes());
         //System.out.println();
 
         //统计单词数
@@ -23,12 +24,12 @@ public class Main {
         for(String key:wordsList) {
             sum+=hashTable.get(key);;
         }
-        bf.write("words: " + sum+"\r\n");
-        bf.write("lines: " + stringBuilders.size()+"\r\n");
+        bf.write(("words: " + sum+"\r\n").getBytes());
+        bf.write(("lines: " + stringBuilders.size()+"\r\n").getBytes());
         int i=0;
         for(String key:wordsList){
             //System.out.println("<"+key+">:"+hashTable.get(key));
-			bf.write("<"+key+">:"+hashTable.get(key)+"\r\n");
+			bf.write(("<"+key+">: "+hashTable.get(key)+"\r\n").getBytes());
             if(++i>=10)break;
         }
         bf.flush();
