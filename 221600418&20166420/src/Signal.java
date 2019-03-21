@@ -1,36 +1,11 @@
 package src;
 
 class Signal {
-    private String inFile = "input.txt", outFile = "output.txt";
+    private String inFile = "input.txt", outFile = "result.txt";
     private int wValue = 1, mValue = 1, nValue = 10;
 
     public Signal(String[] args) {
-        for (int i = 0; i < args.length; i++) {
-            switch (args[i]) {
-                case "-h":
-                case "--help":
-                    help();
-                    break;
-                case "-i":
-                    setInFile(args[++i]);
-                    break;
-                case "-o":
-                    setOutFile(args[++i]);
-                    break;
-                case "-w":
-                    setwValue(Integer.parseInt(args[++i]));
-                    break;
-                case "-m":
-                    setmValue(Integer.parseInt(args[++i]));
-                    break;
-                case "-n":
-                    setnValue(Integer.parseInt(args[++i]));
-                    break;
-                default:
-                    help();
-                    break;
-            }
-        }
+        setInFile(args[0]);
     }
 
     public String getInFile() {
