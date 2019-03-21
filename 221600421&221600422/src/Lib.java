@@ -84,7 +84,7 @@ public class Lib {
         });
         int i=0;
         for(Map.Entry<String,Integer> mapping:list) {
-            writer.write("<"mapping.getKey()+">" + ":" + mapping.getValue()+"\n");
+            writer.write("<"+mapping.getKey()+">" + ":" + mapping.getValue()+"\n");
             i++;
             if(i==10)
                 break;
