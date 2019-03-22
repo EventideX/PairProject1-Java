@@ -9,21 +9,21 @@ public class wordHeap
 	{
 		public String word;
 		public Integer value;
-
+		
 		wordValue(String word, Integer value)
 		{
 			this.word = word;
 			this.value = value;
 		}
 	}
-
+	
 	ArrayList<wordValue> heap;
-
+	
 	wordHeap()
 	{
 		heap = new ArrayList<>();
 	}
-
+	
 	public void add(String word, Integer value)
 	{
 		wordValue wv = new wordValue(word, value);
@@ -39,10 +39,10 @@ public class wordHeap
 			int result = heap.get(a).word.compareTo(heap.get(b).word); //比较字典顺序
 			return result <= 0;
 		}
-
+		
 		return false;
 	}
-
+	
 	int isExist(String key) //主要用于在词堆中找相同词（查找权重）
 	{
 		for(int i = 0; i < heap.size(); i ++)
@@ -63,7 +63,7 @@ public class wordHeap
 		heap.add(wv);
 		heapUp(heap.size() - 1);
 	}
-
+		
 	private void heapUp(int index) //上浮操作
 	{
 		if(index > 1)
@@ -78,7 +78,7 @@ public class wordHeap
 			}
 		}
 	}
-
+	
 	void delete() // 删除键值对
 	{
 		heap.set(1, heap.get(heap.size() - 1)); //把最后的一个叶子的数值赋值给index位置
@@ -119,10 +119,10 @@ public class wordHeap
 			heapDown(child);
 		}
 	}
-
+	
 	public int size()
 	{
 		return heap.size();
 	}
 
-} 
+}

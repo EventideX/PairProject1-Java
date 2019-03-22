@@ -54,7 +54,7 @@ public class count {
             if (isAscii(c))
                 result++;
         }
-        if (all) // 如果需要 自动统计readline()方法省略的换行符
+        if (all) // 如果是基础需求 自动统计readline()方法省略的换行符
             result++;
         return result;
     }
